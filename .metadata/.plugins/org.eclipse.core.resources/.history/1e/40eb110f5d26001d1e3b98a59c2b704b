@@ -1,0 +1,107 @@
+package projects;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Scanner;
+
+import projects.exception.DbException;
+import projects.service.ProjectService;
+
+public class ProjectsApp {
+//	private Scanner scanner = new Scanner(System.in);
+//	private ProjectService projectService = new ProjectService();
+//	
+//	// @formatter:off (Week 9 Assignment - ITEM#1a)
+//	private List<String> operations = List.of(
+//	
+//		"1) Add a project" // Week 9 Assignment - ITEM#1a
+//	);
+//	// @formatter:on (Week 9 Assignment - ITEM#1a)
+	public static void main(String[] args) {
+		
+		new ProjectsApp().processUserSelections();
+	}
+	
+	private void processUserSelections() {
+		boolean done = false;
+
+		while (!done) {
+			
+//			try {
+//			  int selection = getUserSelection();
+//				switch (operation) {
+//				case -1:
+//					done = exitMenu();
+//					break;
+//				case 1:
+//					createTables();
+//					break;
+//
+//				default:
+//					System.out.println("\n" + operation + " is not valid. Try again.");
+//					break;
+//				}
+//			} catch (Exception e) {
+//				System.out.println("\nError: " + e.toString() + "Try again.");
+//			}
+		}
+	}
+			
+	private void createTables() {
+		projectService.createAndPopulateTables();
+		System.out.println("\nTables created and populated!");
+	}
+
+	private boolean exitMenu() {
+		System.out.println("\nExiting the menu. TTFN!");
+		return true;
+	}
+
+//	private int getUserSelection() {
+//		printOperations();
+//		
+//		Integer input = getIntInput("\nEnter a menu selection");
+//		
+//		return Objects.isNull(input) ? -1 : input;
+//	}
+//
+//	private void printOperations() {
+//		System.out.println();
+//		System.out.println("These are the available selections. Press the Enter key to quit:");
+//		
+//		operations.forEach(input -> System.out.println("   " + input));
+//	}
+
+	private Integer getIntInput(String prompt) {
+		String input = getStringInput(prompt);
+		
+		if(Objects.isNull(input)) {
+			return null;
+		}
+		try {
+			return Integer.valueOf(input);
+		}
+		catch (NumberFormatException e) {
+				throw new DbException(input + " is not a valid number. Try again."); 
+			}
+		}
+	
+	private Double getDoubleInput(String prompt) {
+		String input = getStringInput(prompt);
+		
+		if(Objects.isNull(input)) {
+			return null;
+		}
+		try {
+			return Double.parseDouble(input);
+		} catch (NumberFormatException e) {
+			throw new DbException(input + " is not a valid number."); 
+			}
+	}
+	
+	private String getStringInput(String prompt) {
+		System.out.print(prompt + ": ");
+		String line = scanner.nextLine();
+		return line.isBlank() ? null : line.trim();
+	}
+}

@@ -1,0 +1,44 @@
+package projects.service;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+
+import projects.dao.ProjectDao;
+import projects.exception.DbException;
+
+public class ProjectService {
+	private static final String SCHEMA_FILE = "projects_schema.sql";
+	
+	private ProjectDao projectDao = new ProjectDao();
+	
+	public void createAndPopulateTables() {
+		loadFromFile(SCHEMA_FILE);
+	}
+
+	private void loadFromFile(String fileName) {
+		String content = readFileContent(fileName);
+		List<String> sqlStatements = convertContentToSqlStatements(content);
+		
+		projectDao.executeBatch(sqlStatements);
+		
+	}
+
+	private List<String> convertContentToSqlStatements(String content) {
+		content = removeComments(content);
+		content = replaceMultipleWhiteSpaceSequencesWithSingleSpace(content);
+		
+		return extractLinesFromContent(content);
+	}
+
+	private String readFileContent(String fileName) {
+		try {
+			Path path = Paths.get(getClass().getClassLoader().getResource(fileName).toURI());
+			return Files.readString(path);
+		} catch (Exception e) {
+			throw new DbException(e);
+		}
+	}
+	
+}

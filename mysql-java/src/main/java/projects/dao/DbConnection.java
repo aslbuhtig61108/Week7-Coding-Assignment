@@ -22,11 +22,10 @@ public class DbConnection {
 			
 			try {
 				Connection conn = DriverManager.getConnection(url);
-				System.out.println("Successfully obtained connection!");
+				System.out.println("Connection to schema 'projects' is successful.");
 				return conn;
 			} catch (SQLException e) {
 				throw new DbException(e);
-				
 			}
 			
 		}
