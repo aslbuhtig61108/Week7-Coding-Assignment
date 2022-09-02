@@ -55,6 +55,8 @@ public class ProjectDao extends DaoBase {
 			throw new DbException(e);
 		}
 	}
+
+		
 	
 	public void executeBatch(List<String> sqlBatch) {
 		try (Connection conn = DbConnection.getConnection()) {
