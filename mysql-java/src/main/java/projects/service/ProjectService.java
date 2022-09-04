@@ -5,6 +5,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 import projects.dao.ProjectDao;
 import projects.entity.Project;
 import projects.exception.DbException;
@@ -92,4 +95,18 @@ public class ProjectService {
 	//	public static void main(String[] args) {
 	//	new ProjectService().createAndPopulateTables();
 	//  }
+
+//	public List<Project> fetchAllProjects() { 
+//
+//		return null;
+//	}
+
+	public List<Project> fetchAllProjects() {
+		return projectDao.fetchAllProjects();
+	}
+
+	public Project fetchProjectById(Integer projectId) {
+		return projectDao.fetchProjectById(projectId).orElseThrow(
+				() -> new NoSuchElementException ("Project with project ID=" + projectId + "does not exist."));
+	}
 }
