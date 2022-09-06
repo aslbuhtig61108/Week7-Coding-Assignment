@@ -17,7 +17,7 @@ public class ProjectService {
 	private ProjectDao projectDao = new ProjectDao();
 	
 	public Project addProject(Project project) {
-		projectDao.insertProject(project);
+		// projectDao.insertProject(project); This line caused duplication of output.
 		return projectDao.insertProject(project);
 	}
 	
@@ -105,8 +105,8 @@ public class ProjectService {
 		return projectDao.fetchAllProjects();
 	}
 
-	public Project fetchProjectById(Integer projectId) {
-		return projectDao.fetchProjectById(projectId).orElseThrow(
-				() -> new NoSuchElementException ("Project with project ID=" + projectId + "does not exist."));
-	}
+//	public Project fetchProjectById(Integer projectId) {
+//		return projectDao.fetchProjectById(projectId).orElseThrow(
+//				() -> new NoSuchElementException ("Project with project ID=" + projectId + "does not exist."));
+//	}
 }

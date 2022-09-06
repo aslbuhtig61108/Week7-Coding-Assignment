@@ -1,0 +1,145 @@
+Explanation: After going through ProjectApp and Recipes.java (video project), the project_schema.sql isn't utilized 
+at all, therefore, when attempting to list data there is no data to list. Unless, the student, runs the project_schema.sql
+directly into DBeaver.
+
+Below are the items that need to be created in each [Java class].
+
+
+[ProjectsApp.java]
+
+Operations
+
+	Add "1) Create and populate all tables",
+
+
+displayMenu()
+
+	Arrange menu accordingly and add
+
+	case x:
+		createTables();
+		break;
+
+
+	Create method for createTables():
+
+		private void createProjectTables() {
+			projectService.createTables();
+			System.out.println("Project tables created!");
+		}
+
+
+[ProjectService.java]
+
+	Instance Fields
+		private static final String SCHEMA_FILE = "recipe_schema.sql";
+
+	Create method for createTables():
+
+		public void createTables() {
+			loadFromFile(SCHEMA_FILE);
+		}
+
+	Create method loadFromFile():
+
+	private void loadFromFile(String fileName) {
+		String content = readFileContent(fileName);
+		List<String> sqlStatements = convertContentToSqlStatements(content);
+
+		// Used for debugging purposes
+		// sqlStatements.forEach(line -> System.out.println(line));
+
+		projectDao.executeBatch(sqlStatements);
+	}
+
+	private void loadFromFile(String fileName) {
+		String content = readFileContent(fileName);
+		List<String> sqlStatements = convertContentToSqlStatements(content);
+
+		// Used for debugging purposes
+		// sqlStatements.forEach(line -> System.out.println(line));
+
+		recipeDao.executeBatch(sqlStatements);
+	}
+
+	private List<String> convertContentToSqlStatements(String content) {
+		content = removeComments(content);
+		content = replaceWhitespaceSequencesWithSingleSpace(content);
+
+		return extractLinesFromContent(content);
+	}
+
+	private List<String> extractLinesFromContent(String content) {
+		List<String> lines = new LinkedList<>();
+
+		while (!content.isEmpty()) {
+			int semicolon = content.indexOf(";");
+
+			if (semicolon == -1) {
+				if (!content.isBlank()) {
+					lines.add(content);
+				}
+				content = "";
+			} else {
+				lines.add(content.substring(0, semicolon).trim());
+				content = content.substring(semicolon + 1);
+			}
+		}
+		return lines;
+	}
+
+	private String replaceWhitespaceSequencesWithSingleSpace(String content) {
+		return content.replaceAll("\\s+", " ");
+	}
+
+	private String removeComments(String content) {
+		StringBuilder builder = new StringBuilder(content);
+		int commentPos = 0;
+
+		while ((commentPos = builder.indexOf("-- ", commentPos)) != -1) {
+			int eolPos = builder.indexOf("\n", commentPos + 1);
+
+			if (eolPos == -1) {
+				builder.replace(commentPos, builder.length(), "");
+			} else {
+				builder.replace(commentPos, eolPos + 1, ""); // Here I changed 'content' to "" and 3) List recipes now works
+			}
+		}
+		return builder.toString();
+	}
+
+	private String readFileContent(String fileName) {
+		try {
+			Path path = Paths.get(getClass().getClassLoader().getResource(fileName).toURI());
+			return Files.readString(path);
+		} catch (Exception e) {
+			throw new DbException(e);
+		}
+	}
+
+
+[ProjectDao.java]
+
+	Create the method for projectDao.executeBatch(sqlStatements):
+
+	public void executeBatch(List<String> sqlBatch) {
+		try (Connection conn = DbConnection.getConnection()) {
+			startTransaction(conn);
+
+			try (Statement stmt = conn.createStatement()) {
+				for (String sql : sqlBatch) {
+					stmt.addBatch(sql);
+				}
+
+				stmt.executeBatch();
+				commitTransaction(conn);
+			} catch (Exception e) {
+				rollbackTransaction(conn);
+				throw new DbException(e);
+			}
+		} catch (SQLException e) {
+			throw new DbException(e);
+		}
+	}
+
+

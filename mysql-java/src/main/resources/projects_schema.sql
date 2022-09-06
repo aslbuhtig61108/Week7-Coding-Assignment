@@ -9,7 +9,7 @@ project_id INT AUTO_INCREMENT NOT NULL,
 project_name VARCHAR(128) NOT NULL,
 estimated_hours DECIMAL(5,2),
 actual_hours DECIMAL(5,2),
-difficulty ENUM ("Easy", "Medium", "Hard"),
+difficulty INT NOT NULL,
 notes TEXT,
 PRIMARY KEY (project_id)
 );

@@ -16,10 +16,10 @@ public class ProjectsApp {
 
 	// @formatter:off (Week 9 Assignment - ITEM#1a)
 	private List<String> operations = List.of(
-	
+ 
 		"1) Add a project", // Week 9 - ITEM#1a
-		"2) List projects", // Week 10 - ITEM#1 page 2
-		"3) Select a project" // Week 10 - ITEM#2 page 2
+		"2) List projects" // Week 10 - ITEM#1 page 2
+	//	"3) Select a project" // Week 10 - ITEM#2 page 2
 	);
 	// @formatter:on (Week 9 - ITEM#1a)
 	public static void main(String[] args) {
@@ -44,37 +44,19 @@ public class ProjectsApp {
 				case 2:
 					listProjects(); // W10 Page 1 - ITEM#2
 					break;
-				case 3:
-					selectProject();
-					break;
-
+//				case 3:
+//					selectProject();
+//					break;
 				default:
 					System.out.println("\n" + selection + " is not a valid selection. Try again.");
 					break;
 				}
 			} catch (Exception e) {
 				System.out.println("\nError: " + e.toString() + "Try again.");
-				e.printStackTrace(); // W10 - Modifying the dao section "Test it" - ITEM#7
+				
+  				e.printStackTrace(); // W10 - Modifying the dao section "Test it" - ITEM#7
 			}
 		}
-	}
-
-	private void selectProject() { // W10 - Select a project - ITEM#4
-		listProjects();
-		Integer projectId = getIntInput("Enter a project ID to select a project");
-		
-		curProject = null;
-		
-		curProject = projectService.fetchProjectById(projectId);
-		
-		if (Objects.isNull(curProject)) {
-			System.out.println("\nYou are not working with a projct.");
-		} else {
-			System.out.println("\nYou are working with project: " + curProject);
-		}
-		
-		
-		
 	}
 
 	private void createProject() {
@@ -108,10 +90,20 @@ public class ProjectsApp {
 		// return projects;
 	}
 
-	private boolean exitMenu() {
-		System.out.println("\nExiting the menu.");
-		return true;
-	}
+//	private void selectProject() { // W10 - Select a project - ITEM#4
+//	listProjects();
+//	Integer projectId = getIntInput("Enter a project ID to select a project");
+//	
+//	curProject = null;
+//	
+//	curProject = projectService.fetchProjectById(projectId);
+//	
+//	if (Objects.isNull(curProject)) {
+//		System.out.println("\nYou are not working with a project.");
+//	} else {
+//		System.out.println("\nYou are working with project: " + curProject);
+//	}
+//}
 
 	private int getUserSelection() {
 		printOperations();
@@ -126,14 +118,15 @@ public class ProjectsApp {
 		System.out.println("These are the available selections. Press the Enter key to quit:");
 
 		operations.forEach(input -> System.out.println("   " + input));
-
-		if (Objects.isNull(curProject)) {
-			System.out.println("\nYou are not working with a project.");
-		} else {
-			System.out.println("\nYou are working with project " + curProject);
-		}
+		
+	}
+	
+	private boolean exitMenu() {
+		System.out.println("\nExiting the menu.");
+		return true;
 	}
 
+	
 	private BigDecimal getDecimalInput(String prompt) {
 		String input = getStringInput(prompt);
 
