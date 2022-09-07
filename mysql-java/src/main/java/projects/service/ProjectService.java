@@ -105,8 +105,10 @@ public class ProjectService {
 		return projectDao.fetchAllProjects();
 	}
 
-//	public Project fetchProjectById(Integer projectId) {
-//		return projectDao.fetchProjectById(projectId).orElseThrow(
-//				() -> new NoSuchElementException ("Project with project ID=" + projectId + "does not exist."));
-//	}
+	public Project fetchProjectById(Integer projectId) {
+		return projectDao.fetchProjectById(projectId).orElseThrow(
+			() -> new NoSuchElementException (
+			"Project with project ID=" + projectId
+				+ " does not exist."));
+	}
 }
